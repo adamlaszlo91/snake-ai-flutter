@@ -4,6 +4,17 @@ import 'package:snake_ai/config.dart';
 
 enum Direction { left, right, up, down }
 
+extension DirectionOpposite on Direction {
+  Direction opposite() {
+    return switch (this) {
+      Direction.left => Direction.right,
+      Direction.right => Direction.left,
+      Direction.up => Direction.down,
+      Direction.down => Direction.up
+    };
+  }
+}
+
 class GameState {
   final bool running;
   final List<Point> snake;

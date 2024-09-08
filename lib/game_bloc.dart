@@ -45,7 +45,9 @@ class GameBloc extends Bloc<GameEvent, GameState> {
 
     on<DirectionChangeEvent>(
       (event, emit) {
-        emit(state.copyWith(direction: event.direction));
+        if (state.direction.opposite() != event.direction) {
+          emit(state.copyWith(direction: event.direction));
+        }
       },
     );
 
