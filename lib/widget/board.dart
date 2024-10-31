@@ -25,11 +25,11 @@ class Board extends StatelessWidget {
       aspectRatio: 1,
       child: Row(
         mainAxisSize: MainAxisSize.max,
-        children: [
-          for (var x = 0; x < boardSize[0]; x += 1)
-            Expanded(
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
+          children: [
+            for (var x = 0; x < boardSize[0]; x += 1)
+              Expanded(
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
                 children: [
                   for (var y = 0; y < boardSize[1]; y += 1)
                     Expanded(

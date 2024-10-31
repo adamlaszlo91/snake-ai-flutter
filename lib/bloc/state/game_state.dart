@@ -1,15 +1,16 @@
 import 'dart:math';
 
+import 'package:equatable/equatable.dart';
 import 'package:snake_ai/bloc/state/direction.dart';
 
-class GameState {
+class GameState extends Equatable {
   final List<int> boardSize;
   final bool running;
   final List<Point> snakePosition;
   final Direction direction;
   final Point powerUpPosition;
 
-  GameState({
+  const GameState({
     this.boardSize = const <int>[16, 16],
     this.running = false,
     this.snakePosition = const [
@@ -72,4 +73,9 @@ class GameState {
     }
     return freePositions;
   }
+
+  @override
+  // TODO: Test
+  List<Object?> get props =>
+      [boardSize, running, snakePosition, direction, powerUpPosition];
 }

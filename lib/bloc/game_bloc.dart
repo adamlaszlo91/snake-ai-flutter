@@ -23,6 +23,10 @@ class DirectionChangeEvent extends GameEvent {
 class GameBloc extends Bloc<GameEvent, GameState> {
   Timer? _timer;
 
+  bool isGameInProgress() {
+    return _timer?.isActive ?? false;
+  }
+
   GameBloc(super.initialState) {
     on<StartEvent>(
       (event, emit) {
@@ -34,7 +38,11 @@ class GameBloc extends Bloc<GameEvent, GameState> {
           },
         );
         // TODO: Use copy instead
-        emit(GameState(boardSize: boardSize, running: true));
+        var nextState = GameState(boardSize: boardSize, running: true);
+        nextState = nextState.copyWith(
+            powerUpPosition:
+                _selectRandomPosition(nextState.getFreePositions()));
+        emit(nextState);
       },
     );
 
@@ -81,14 +89,18 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         if (nextState.hitWall()) {
           add(StopEvent());
         } else if (nextState.hitPowerUp()) {
-          final freePositions = nextState.getFreePositions();
-          freePositions.shuffle();
-          emit(nextState.copyWith(powerUpPosition: freePositions.first));
+          emit(nextState.copyWith(
+              powerUpPosition:
+                  _selectRandomPosition(nextState.getFreePositions())));
         } else {
           updatedSnake.removeLast();
           emit(nextState.copyWith(snakePosition: updatedSnake));
         }
       },
     );
+  }
+
+  Point _selectRandomPosition(List<Point> positions) {
+    return positions[Random().nextInt(positions.length)];
   }
 }
