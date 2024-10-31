@@ -22,8 +22,10 @@ void main() {
     'Start event',
     build: () => GameBloc(GameState()),
     act: (bloc) => bloc.add(StartEvent()),
-    expect: () =>
-        [isA<GameState>().having((obj) => obj.running, 'running', true)],
+    expect: () => [
+      isA<GameState>().having((obj) => obj.running, 'running', true).having(
+          (obj) => obj.powerUpPosition, 'powerUpPosition', isNot([-1, -1]))
+    ],
   );
 
   blocTest('Stop event',
