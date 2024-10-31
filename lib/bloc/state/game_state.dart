@@ -50,6 +50,16 @@ class GameState {
     return snakePosition.first == powerUpPosition;
   }
 
+  bool hitSelf() {
+    for (var snakeBodyPosition
+        in snakePosition.sublist(1, snakePosition.length)) {
+      if (snakeBodyPosition == snakePosition.first) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   List<Point> getFreePositions() {
     final List<Point> freePositions = [];
     for (var x = 0; x < boardSize[0]; x += 1) {
