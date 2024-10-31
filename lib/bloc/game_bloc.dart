@@ -28,21 +28,21 @@ class GameBloc extends Bloc<GameEvent, GameState> {
   }
 
   GameBloc(super.initialState) {
+    // TODO: Start event should not create a new state when we already have one in the constructor
     on<StartEvent>(
       (event, emit) {
         _timer?.cancel();
         _timer = Timer.periodic(
-          const Duration(milliseconds: 500),
+          const Duration(milliseconds: 250),
           (timer) {
             add(StepEvent());
           },
         );
-        // TODO: Use copy instead
-        var nextState = GameState(boardSize: boardSize, running: true);
-        nextState = nextState.copyWith(
-            powerUpPosition:
-                _selectRandomPosition(nextState.getFreePositions()));
-        emit(nextState);
+        var state = GameState(boardSize: boardSize);
+        state = state.copyWith(
+            running: true,
+            powerUpPosition: _selectRandomPosition(state.getFreePositions()));
+        emit(state);
       },
     );
 
