@@ -1,2 +1,1 @@
-const boardWidth = 16;
-const boardHeight = 16;
+const boardSize = [16, 16];

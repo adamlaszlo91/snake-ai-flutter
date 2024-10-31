@@ -1,1 +1,3 @@
-# Snake game with AI
+# snake-ai-flutter
+
+A learning snake game in Flutter.

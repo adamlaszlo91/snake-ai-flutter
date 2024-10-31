@@ -2,7 +2,9 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:snake_ai/game_state.dart';
+import 'package:snake_ai/bloc/state/direction.dart';
+import 'package:snake_ai/bloc/state/game_state.dart';
+import 'package:snake_ai/config.dart';
 
 sealed class GameEvent {}
 
@@ -31,7 +33,8 @@ class GameBloc extends Bloc<GameEvent, GameState> {
             add(StepEvent());
           },
         );
-        emit(GameState(running: true));
+        // TODO: Use copy instead
+        emit(GameState(boardSize: boardSize, running: true));
       },
     );
 
@@ -69,16 +72,21 @@ class GameBloc extends Bloc<GameEvent, GameState> {
           return Point(nextX, nextY);
         }
 
-        final updatedSnake = [
-          nextSnakeHead(state.snake.first),
-          ...state.snake.take(state.snake.length - 1)
+        var updatedSnake = [
+          nextSnakeHead(state.snakePosition.first),
+          ...state.snakePosition
         ];
-        final nextState = state.copyWith(snake: updatedSnake);
+        final nextState = state.copyWith(snakePosition: updatedSnake);
 
-        if (nextState.isLossState()) {
+        if (nextState.hitWall()) {
           add(StopEvent());
+        } else if (nextState.hitPowerUp()) {
+          final freePositions = nextState.getFreePositions();
+          freePositions.shuffle();
+          emit(nextState.copyWith(powerUpPosition: freePositions.first));
         } else {
-          emit(nextState);
+          updatedSnake.removeLast();
+          emit(nextState.copyWith(snakePosition: updatedSnake));
         }
       },
     );

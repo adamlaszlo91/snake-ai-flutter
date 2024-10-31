@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:snake_ai/board.dart';
-import 'package:snake_ai/game_bloc.dart';
-import 'package:snake_ai/game_state.dart';
+import 'package:snake_ai/bloc/game_bloc.dart';
+import 'package:snake_ai/bloc/state/direction.dart';
+import 'package:snake_ai/bloc/state/game_state.dart';
+import 'package:snake_ai/config.dart';
+import 'package:snake_ai/widget/board.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,7 +19,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       home: BlocProvider<GameBloc>(
           create: (context) {
-            return GameBloc(GameState());
+            return GameBloc(GameState(boardSize: boardSize));
           },
           child: const MyHomePage()),
     );
@@ -72,9 +74,11 @@ class _MyHomePageState extends State<MyHomePage> {
               child: const Text('Down')),
           BlocBuilder<GameBloc, GameState>(
             builder: (context, state) {
-              return Board(snake: state.snake);
+              return Board(
+                  snake: state.snakePosition, powerUp: state.powerUpPosition);
             },
-            buildWhen: (previous, current) => previous.snake != current.snake,
+            buildWhen: (previous, current) =>
+                previous.snakePosition != current.snakePosition,
           )
         ],
       ),
